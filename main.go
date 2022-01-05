@@ -5,7 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"strings"
+	"time"
 
+	"github.com/briandowns/spinner"
 	"github.com/google/go-github/v41/github"
 	"golang.org/x/oauth2"
 )
@@ -39,6 +41,10 @@ func main() {
 	pullRequestData := PullRequestsData{}
 
 	// List all pull requests for repos in settings
+	var bVal = false
+	fmt.Println("Checking repositories for open pull requests")
+	s := spinner.New(spinner.CharSets[36], 300*time.Millisecond)
+	s.Start()
 	for _, repo := range settings.Repositories {
 		pullrequests, resp, err := client.PullRequests.List(ctx, settings.Organization, repo.Name, nil)
 		if err != nil {
@@ -51,7 +57,13 @@ func main() {
 				pullRequestData.PullRequests = append(pullRequestData.PullRequests, pr)
 				fmt.Println(strings.ToUpper(repo.Name) + " " + *pulls.Title + " " + *pulls.HTMLURL)
 			}
+		} else {
+			bVal = true
 		}
 		_ = resp
+	}
+	s.Stop()
+	if bVal {
+		fmt.Println("No open pull requests at this time")
 	}
 }
