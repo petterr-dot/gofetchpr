@@ -72,6 +72,7 @@ Download the Go installer from https://go.dev/doc/install
    ```
    go install
    ```
+   Every time you update settings.go (adding/removing repositories) you need to build the binaries again with this command
 
 
 
