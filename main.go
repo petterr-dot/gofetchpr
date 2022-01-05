@@ -39,9 +39,9 @@ func main() {
 	ctx := context.Background()
 	client := getClient(settings.APIKey, ctx)
 	repositoryData := []RepositoryData{}
+
 	// List all pull requests for repos in settings
 	var bVal = false
-	//fmt.Println("Checking repositories for open pull requests")
 	s := spinner.New(spinner.CharSets[36], 300*time.Millisecond)
 	s.Prefix = "Checking for open pull requests "
 	s.Start()
@@ -57,7 +57,6 @@ func main() {
 			for _, pulls := range pullrequests {
 				pr := PullRequestItem{Title: *pulls.Title, URL: *pulls.HTMLURL}
 				data.PullRequests = append(data.PullRequests, pr)
-				//fmt.Println(strings.ToUpper(repo.Name) + " " + *pulls.Title + " " + *pulls.HTMLURL)
 			}
 			repositoryData = append(repositoryData, data)
 			bVal = true
