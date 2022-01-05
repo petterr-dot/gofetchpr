@@ -13,12 +13,12 @@ import (
 )
 
 type PullRequestItem struct {
-	Repository string
-	Title      string
-	URL        string
+	Title string
+	URL   string
 }
 
-type PullRequestsData struct {
+type RepositoryData struct {
+	Name         string
 	PullRequests []PullRequestItem
 }
 
@@ -38,32 +38,44 @@ func main() {
 
 	ctx := context.Background()
 	client := getClient(settings.APIKey, ctx)
-	pullRequestData := PullRequestsData{}
-
+	repositoryData := []RepositoryData{}
 	// List all pull requests for repos in settings
 	var bVal = false
-	fmt.Println("Checking repositories for open pull requests")
+	//fmt.Println("Checking repositories for open pull requests")
 	s := spinner.New(spinner.CharSets[36], 300*time.Millisecond)
+	s.Prefix = "Checking for open pull requests "
 	s.Start()
 	for _, repo := range settings.Repositories {
 		pullrequests, resp, err := client.PullRequests.List(ctx, settings.Organization, repo.Name, nil)
+		s.Suffix = " " + repo.Name
 		if err != nil {
 			fmt.Printf("\nerror: %v\n", err)
 			return
 		}
 		if len(pullrequests) > 0 {
+			data := RepositoryData{Name: strings.ToUpper(repo.Name)}
 			for _, pulls := range pullrequests {
-				pr := PullRequestItem{Repository: strings.ToUpper(repo.Name), Title: *pulls.Title, URL: *pulls.HTMLURL}
-				pullRequestData.PullRequests = append(pullRequestData.PullRequests, pr)
-				fmt.Println(strings.ToUpper(repo.Name) + " " + *pulls.Title + " " + *pulls.HTMLURL)
+				pr := PullRequestItem{Title: *pulls.Title, URL: *pulls.HTMLURL}
+				data.PullRequests = append(data.PullRequests, pr)
+				//fmt.Println(strings.ToUpper(repo.Name) + " " + *pulls.Title + " " + *pulls.HTMLURL)
 			}
-		} else {
+			repositoryData = append(repositoryData, data)
 			bVal = true
 		}
 		_ = resp
 	}
 	s.Stop()
-	if bVal {
+	if !bVal {
 		fmt.Println("No open pull requests at this time")
+	} else {
+		fmt.Println("These pull requests might need your attention")
+		fmt.Println("")
+		for _, repo := range repositoryData {
+			fmt.Println("[ " + repo.Name + " ]")
+			for _, pr := range repo.PullRequests {
+				fmt.Println(pr.Title + " " + pr.URL)
+			}
+			fmt.Println("")
+		}
 	}
 }
