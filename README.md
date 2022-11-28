@@ -11,35 +11,7 @@ a simple cmd line tool to list open pull request in your repositories
 
 ##### Go
 
-Download the Go installer from https://go.dev/doc/install
-
-1. Extract the archive you downloaded into /usr/local, creating a Go tree in /usr/local/go.
-
-   **Important:** This step will remove a previous installation at /usr/local/go, if any, prior to extracting. Please back up any data before proceeding.
-
-   For example, run the following as root or through `sudo`:
-
-   ```
-   rm -rf /usr/local/go && tar -C /usr/local -xzf go1.17.5.linux-amd64.tar.gz
-   ```
-
-2. Add /usr/local/go/bin to the PATH environment variable.
-
-   You can do this by adding the following line to your $HOME/.profile or /etc/profile (for a system-wide installation):
-
-   ```
-   export PATH=$PATH:/usr/local/go/bin
-   ```
-
-   **Note:** Changes made to a profile file may not apply until the next time you log into your computer. To apply the changes immediately, just run the shell commands directly or execute them from the profile using a command such as `source $HOME/.profile`.
-
-3. Verify that you've installed Go by opening a command prompt and typing the following command:
-
-   ```
-   $ go version
-   ```
-
-4. Confirm that the command prints the installed version of Go.
+Download and install Go (if you dont have it already) https://go.dev/doc/install
 
 
 
