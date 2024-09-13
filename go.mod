@@ -1,10 +1,13 @@
 module github.com/petterr-dot/gofetchpr
 
-go 1.17
+go 1.21
+
+toolchain go1.22.3
 
 require (
 	github.com/briandowns/spinner v1.18.0
 	github.com/google/go-github/v41 v41.0.0
+	github.com/google/go-github/v64 v64.0.0
 	golang.org/x/oauth2 v0.0.0-20180821212333-d2e6202438be
 )
 
